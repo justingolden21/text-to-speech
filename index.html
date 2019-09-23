@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Speak Text</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+	* {
+		text-align: center;
+		font-family: Arial;
+	}
+	#text {
+		width: 90%;
+	}
+	button {
+		background-color: white;
+		border: 1px solid #333;
+		padding: 5px;
+		cursor: pointer;
+	}
+	button:hover {
+		background-color: lightgrey;
+	}
+</style>
+</head>
+<body>
+
+<h3>Text To Speech</h3>
+<textarea id="text" rows="10" placeholder="Enter text to be spoken here..."></textarea>
+<br><br>
+<button id="speak">Speak</button>
+<button id="cancel">Cancel</button>
+<button id="pause-resume">Pause</button>
+<br><br>
+
+<label for="rate">Rate:</label>
+<input id="rate" type="range" min="0" max="5" step="0.1" value="1">
+
+<label for="pitch">Pitch:</label>
+<input id="pitch" type="range" min="0" max="10" step="0.1" value="1">
+
+<p>Just copy or type text above, then click the Speak button to hear it outloud.</p>
+<p>You can resize the text window by dragging the lines on the bottom right.</p>
+<p>Use the sliders to adjust the rate and pitch.</p>
+<p>Note: If speech isn't working, try clicking the Cancel button. Also make sure your volume is on.</p>
+
+<script>
+/*
+https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis
+
+Ideas for later:
+Print section inside textarea
+Zoom in
+Icons
+Modal and about using cut/copy/paste shortcuts and tab keys for navigation
+add titles to buttons?
+*/
+let synth;
+window.onload = ()=> {
+	synth = window.speechSynthesis;
+
+	document.getElementById('speak').onclick = ()=> {
+		let str = document.getElementById('text').value;	
+		let msg = new SpeechSynthesisUtterance(str);
+		msg.rate = parseInt(document.getElementById('rate').value);
+		msg.pitch = parseInt(document.getElementById('pitch').value);
+		synth.speak(msg);
+	}
+	document.getElementById('cancel').onclick = ()=> {
+		synth.cancel();
+	}
+	document.getElementById('pause-resume').onclick = ()=> {
+		if(synth.paused) {
+			synth.resume();
+			document.getElementById('pause-resume').innerHTML = 'Pause';
+		} else {
+			synth.pause();
+			document.getElementById('pause-resume').innerHTML = 'Resume';
+		}
+
+	}
+}
+</script>
+
+</body>
+</html>
